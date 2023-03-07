@@ -1,0 +1,31 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx_web
+    build: ./Docker/nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./laravel:/usr/share/nginx/html
+  php:
+    container_name: laravel_hobbys
+    build: ./docker/php
+    volumes:
+      - ./laravel:/var/www/laravel
+
+  db:
+    container_name: db_mysql
+    build: ./docker/mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - laravel-db-volume:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+volumes:
+  laravel-db-volume:
