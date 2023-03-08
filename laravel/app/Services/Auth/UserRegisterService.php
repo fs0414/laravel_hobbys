@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Services\Auth;
-use Laravel\Sanctum\HasApiTokens;
 
 class UserRegisterService
 {
-    use HasApiTokens;
-
-    public function userRegisterToken($user)
+    public function userRegisterToken($register_user)
     {
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $register_user->createToken('auth_token')->plainTextToken;
 
         return $token;
     }

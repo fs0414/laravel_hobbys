@@ -51,4 +51,12 @@ class User extends Authenticatable
 
         return $user;
     }
+
+    public function loginVerify($loginRequest){
+        $login_wheres = [['email', $loginRequest['email']], ['password', $loginRequest['password']]];
+
+        $login_user = User::where($login_wheres);
+
+        return $login_user;
+    }
 }
