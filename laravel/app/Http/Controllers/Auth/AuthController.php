@@ -37,22 +37,13 @@ class AuthController extends Controller
     public function login(LoginRequest $loginRequest, LoginService $loginService, User $user)
     {
         try {
-            // $credentials = (['email' => $email, 'password' => $password]);
             $credentials = $loginRequest->all();
 
             $loginService->loginAttempt($credentials);
 
-            // if(Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
-            //     return response()->json([
-            //         'message' => 'Invalid login details'
-            //     ], 401);
-            // };
-
             $login_user = $user->loginVerify($loginRequest);
 
             $login_user = auth()->user();
-
-            // dd($login_user);
 
             $token = $loginService->tokenPublishing($login_user);
 
@@ -64,10 +55,14 @@ class AuthController extends Controller
 
     public function me()
     {
-        $auth_result = Auth::user();
-
-        dd($auth_result);
-
         return response()->json(auth()->user());
     }
+
+    public function logout()
+    {
+        Auth::guard('sanctum')->user()->tokens()->delete();
+
+        return response()->json([ 'message' => 'logout success' ]);
+    }
 }
+
