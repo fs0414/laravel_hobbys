@@ -14,13 +14,9 @@ class AuthController extends Controller
     public function register(UserRegisterRequest $request, User $userModel, UserRegisterService $userRegisterService)
     {
         try {
-            DB::beginTransaction();
-
             $user = $userModel->userRegister($request);
 
             $token = $userRegisterService->userRegisterToken($user);
-
-            DB::commit();
 
             return response()->json([
                 'access_token' => $token,
@@ -28,7 +24,6 @@ class AuthController extends Controller
             ]);
 
         } catch ( \Exception $e) {
-            DB::rollBack();
             echo $e->getMessage();
         };
     }
