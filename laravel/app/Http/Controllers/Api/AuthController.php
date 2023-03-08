@@ -20,8 +20,6 @@ class AuthController extends Controller
 
             $token = $userRegisterService->userRegisterToken($user);
 
-            // throw new \Exception('user not create of rollback');
-
             DB::commit();
 
             return response()->json([

@@ -52,16 +52,5 @@ class User extends Authenticatable
         ]);
 
         return $user;
-        // dd($user->createToken('auth_token'));
-        
-        // $token = $user->createToken('auth_token')->plainTextToken;
-
-        // dd($token);
-
-
-        // return response()->json([
-        //     'access_token' => $token,
-        //     'token_type' => 'bearer'
-        // ]);
     }
 }
