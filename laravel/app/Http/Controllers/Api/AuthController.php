@@ -13,8 +13,8 @@ class AuthController extends Controller
 {
     public function register(UserRegisterRequest $request, User $userModel, UserRegisterService $userRegisterService)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
 
             $user = $userModel->userRegister($request);
 
