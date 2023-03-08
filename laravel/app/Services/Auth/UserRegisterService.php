@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Services\Api\Auth;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
+namespace App\Services\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class UserRegisterService

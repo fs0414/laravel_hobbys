@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\Api\Auth\UserRegisterService;
-use Illuminate\Http\Request;
+use App\Services\Auth\UserRegisterService;
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
