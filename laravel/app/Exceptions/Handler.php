@@ -3,8 +3,13 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Response;
 use Throwable;
+use Illuminate\Auth\AuthenticationException;
 
+/**
+ * Summary of Handler
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -44,5 +49,15 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Summary of unauthenticated
+     * @param mixed $request
+     * @param AuthenticationException $exception
+     * @return void
+     */
+    protected function unauthenticated($request, AuthenticationException $exception){
+        return response()->json(['error' => 'Unauthenticated.'], Response::HTTP_UNAUTHORIZED);
     }
 }

@@ -20,14 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group([ 'prefix' => 'auth' ], function(){
-    Route::get('login', 'AuthController@login');
+    Route::post('login', [AuthController::class, 'login']);
 });
 
 Route::group([
     'prefix' => 'auth',
-    'middleware' => 'auth:api'
+    // 'middleware' => 'auth:api'
 ], function() {
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
 });
