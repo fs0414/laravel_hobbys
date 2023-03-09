@@ -13,14 +13,14 @@ class ArticlesController extends Controller
     }
     public function index()
     {
-        // $articles = Article::all();
+        $articles = Article::all();
 
-        $softDeleteArticle = Article::withTrashed()->get();
+        // $softDeleteArticle = Article::withTrashed()->get();
 
         return response()->json([
             'status_code' => 201,
-            // 'articles' => $articles,
-            'softDeletesArticle' => $softDeleteArticle
+            'articles' => $articles,
+            // 'softDeletesArticle' => $softDeleteArticle
         ]);
     }
 
