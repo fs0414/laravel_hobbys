@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ArticlesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,11 +25,24 @@ Route::group([ 'prefix' => 'auth' ], function(){
     Route::post('login', [AuthController::class, 'login']);
 });
 
+
+
 Route::group([
-    'prefix' => 'auth',
     'middleware' => 'auth:sanctum'
 ], function() {
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::group([
+        'name' => 'auth.',
+        'prefix' => 'auth',
+    ], function() {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('me', [AuthController::class, 'me']);
+    });
+    Route::group([
+        'name' => 'article.',
+    ], function() {
+        Route::resource('article', ArticlesController::class)->except([
+            'create', 'edit'
+        ]);
+    });
 });
