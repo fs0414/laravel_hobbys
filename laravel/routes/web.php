@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\LineItemController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +18,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group([
+    'as' => 'product.',
+], function() {
+    Route::get('products', [ProductController::class, 'index'])->name('index');
+    Route::get('product/{id}', [ProductController::class, 'show'])->name('show');
+});
+
+Route::group([
+    'as' => 'cart.',
+], function() {
+    Route::get('cart' , [CartController::class, 'index'])->name('index');
+});
+
+Route::group([
+    'as' => 'line_item.',
+], function() {
+    Route::post('line_item/create', [LineItemController::class, 'create'])->name('create');
+    Route::delete('line_item/delete', [LineItemController::class, 'delete'])->name('delete');
+    Route::get('line_item/delete', [LineItemController::class, 'delete'])->name('delete');
 });
