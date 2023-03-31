@@ -12,7 +12,7 @@ class Article extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['title', 'description', 'user_id'];
 
     public function user()
     {
@@ -21,12 +21,11 @@ class Article extends Model
 
     public function articleStore($request)
     {
-        $article = new Article;
-
-        $article->title = $request->title;
-        $article->description = $request->description;
-        $article->user_id = Auth::id();
-        $article->save();
+        $article = self::create([
+            "title" => $request->title,
+            "description" => $request->description,
+            "user_id" => Auth::id(),
+        ]);
 
         return $article;
     }
