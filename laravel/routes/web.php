@@ -31,6 +31,7 @@ Route::group([
     'as' => 'cart.',
 ], function() {
     Route::get('cart' , [CartController::class, 'index'])->name('index');
+    Route::get('cart/checkout', [CartController::class, 'checkout'])->name('checkout');
 });
 
 Route::group([
