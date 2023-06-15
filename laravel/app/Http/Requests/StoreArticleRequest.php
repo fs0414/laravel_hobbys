@@ -23,7 +23,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title' => 'required | max:255',
-            'description' => 'max:255'
+            'content' => 'max:255'
         ];
     }
 }

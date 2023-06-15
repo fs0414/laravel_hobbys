@@ -15,22 +15,31 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum', ['except' => ['register', 'login']]);
+        $this->middleware('auth:sanctum', ['except' => ['allUser', 'register', 'login']]);
     }
+
+    public function allUser()
+    {
+        $users = User::all();
+
+        return response()->json([
+            'status_code' => 200,
+            'users' => $users
+        ]);
+    }
+
     public function register(UserRegisterRequest $request, User $user, UserRegisterService $userRegisterService)
     {
         try {
-            $register_user = $user->userRegister($request);
-
-            $token = $userRegisterService->userRegisterToken($register_user);
+            $new_user = $user->userRegister($request);
 
             return response()->json([
-                'access_token' => $token,
-                'token_type' => 'bearer'
+                'status_code' => 201,
+                'new_user' => $new_user
             ]);
 
         } catch ( \Exception $e) {
-            echo $e->getMessage();
+            $e->getMessage();
         };
     }
 
@@ -47,7 +56,9 @@ class AuthController extends Controller
 
             $token = $loginService->tokenPublishing($login_user);
 
-            return response()->json(['access_token' => $token, 'token_type' => 'bearer']);
+            return response()->json([
+                'status_code' => 201, 'access_token' => $token
+            ]);
         } catch (\Exception $e) {
             $e->getMessage();
         };

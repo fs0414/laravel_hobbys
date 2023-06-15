@@ -28,12 +28,15 @@ Route::group([ 'prefix' => 'auth' ], function(){
 
 
 Route::group([
-    'middleware' => 'auth:sanctum'
+    'name' => 'auth.',
 ], function() {
+    Route::get('users', [AuthController::class, 'allUser']);
+    Route::post('register', [AuthController::class, 'register']);
     Route::group([
         'name' => 'auth.',
         'prefix' => 'auth',
     ], function() {
+
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('me', [AuthController::class, 'me']);
@@ -44,5 +47,6 @@ Route::group([
         Route::resource('article', ArticlesController::class)->except([
             'create', 'edit'
         ]);
+        Route::get('softDeleteArticles', [ArticlesController::class, 'softDeleteIndex']);
     });
 });
