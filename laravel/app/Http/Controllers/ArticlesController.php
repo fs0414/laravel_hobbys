@@ -19,8 +19,18 @@ class ArticlesController extends Controller
 
         return response()->json([
             'status_code' => 201,
-            'articles' => $articles,
+            'articles' => $articles
             // 'softDeletesArticle' => $softDeleteArticle
+        ]);
+    }
+
+    public function softDeleteIndex()
+    {
+        $articles = Article::withTrashed()->get();
+
+        return response()->json([
+            'status_code' => 200,
+            'softDeleteArticles' => $articles
         ]);
     }
 
