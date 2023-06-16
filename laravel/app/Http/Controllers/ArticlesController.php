@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreArticleRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreArticleRequest;
 use App\Models\Article;
+use App\Http\Resources\ArticleResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ArticlesController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth:sanctum');
     }
-    public function index()
-    {
-        $articles = Article::all();
 
-        // $softDeleteArticle = Article::withTrashed()->get();
+    public function index(): JsonResponse
+    {
+        $articles = Article::with('comments')->get();
 
         return response()->json([
             'status_code' => 201,
-            'articles' => $articles
-            // 'softDeletesArticle' => $softDeleteArticle
+            'articles' => ArticleResource::collection($articles)
         ]);
     }
 
@@ -37,12 +39,12 @@ class ArticlesController extends Controller
     public function store(StoreArticleRequest $request, Article $article)
     {
         try {
-            $article_result = $article->articleStore($request);
+            $new_article = $article->articleStore($request);
 
             return response()->json([
                 'status_code'=> 201,
                 'message' => 'success article post',
-                'article' => $article_result,
+                'article' => $new_article,
             ]);
         } catch (\Exception $e) {
             $e->getMessage();

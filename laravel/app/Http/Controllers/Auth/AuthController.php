@@ -9,7 +9,8 @@ use App\Services\Auth\UserRegisterService;
 use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Request;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -18,13 +19,13 @@ class AuthController extends Controller
         $this->middleware('auth:sanctum', ['except' => ['allUser', 'register', 'login']]);
     }
 
-    public function allUser()
+    public function allUser(): JsonResponse
     {
-        $users = User::all();
+        $users = User::with('articles')->get();
 
         return response()->json([
             'status_code' => 200,
-            'users' => $users
+            'users' => UserResource::collection($users)
         ]);
     }
 
@@ -73,7 +74,9 @@ class AuthController extends Controller
     {
         Auth::guard('sanctum')->user()->tokens()->delete();
 
-        return response()->json([ 'message' => 'logout success' ]);
+        return response()->json([
+            'message' => 'logout success'
+        ]);
     }
 }
 
