@@ -26,6 +26,7 @@ Route::group([
 ], function() {
     Route::get('users', [AuthController::class, 'allUser']);
     Route::post('me', [AuthController::class, 'me']);
+    Route::get('root', [AuthController::class, 'redirectRoot']);
     Route::group([ 'prefix' => 'auth', ], function() {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);

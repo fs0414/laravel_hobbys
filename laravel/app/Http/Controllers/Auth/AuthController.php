@@ -78,5 +78,10 @@ class AuthController extends Controller
             'message' => 'logout success'
         ]);
     }
+
+    public function redirectRoot()
+    {
+        return view('welcome');
+    }
 }
 
