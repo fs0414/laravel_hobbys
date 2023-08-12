@@ -2,26 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Article\StoreArticleResource;
+use App\Repositories\Article\ArticleInterface;
+use App\Repositories\Article\ArticleRepository;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\Article\StoreArticleRequest;
 use App\Models\Article;
 use App\Http\Resources\Article\IndexArticleResource;
 use App\Http\Resources\Article\ShowArticleResource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ArticlesController extends Controller
 {
-    public function __construct()
+    private $article;
+    private $articleRepository;
+    public function __construct(Article $article, ArticleRepository $articleRepository)
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum', ['expect' => [ 'show', 'create' ]]);
+        $this->article = $article;
+        $this->articleRepository = $articleRepository;
     }
 
-    public function index(): JsonResponse
+    public function index()
+    // public function index(Article $article, ArticleRepository $articleRepository)
     {
-        $articles = Article::with('comments')->get();
+        $articles = $this->articleRepository->all($this->article);
+        // $articles = $articleInterface->all($article);
+        // $articles = $articleRepository->all($article);
+        // $articles = Article::with('comments')->get();
 
         Log::info('Articles all get', ['$articles' => $articles]);
 
@@ -32,7 +41,8 @@ class ArticlesController extends Controller
 
     public function softDeleteIndex()
     {
-        $articles = Article::withTrashed()->get();
+        $articles = $this->articleRepository->trashedArticle($this->article);
+        // $articles = Article::withTrashed()->get();
 
         return response()->json([
             'softDeleteArticles' => $articles
@@ -41,17 +51,17 @@ class ArticlesController extends Controller
 
     public function store(StoreArticleRequest $request, Article $article)
     {
-        DB::beginTransaction();
         try {
-            $new_article = $article->articleStore($request);
+            DB::beginTransaction();
+            $article = $this->articleRepository->create($this->article, $request);
+            $article = collect([$article]);
 
             DB::commit();
 
             return response()->json([
-                'status_code'=> 201,
                 'message' => 'success article post',
-                'article' => $new_article,
-            ]);
+                'article' => StoreArticleResource::collection($article),
+            ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::info($e);
@@ -59,24 +69,25 @@ class ArticlesController extends Controller
         }
     }
 
-    public function show(Article $article)
+    public function show($id)
     {
-        // dd('test');
         try {
-            // dd($article->id);
-            $article = Article::where('id', $article->id)->with('comments')->get();
-            throw new \Exception('log test');
+            $article = $this->articleRepository->show($this->article, $id);
+            return response()->json([
+                'article' => ShowArticleResource::collection($article)
+            ]);
         } catch (\Exception $e) {
             Log::info($e);
             throw $e;
         }
     }
 
-    public function update(StoreArticleRequest $request, Article $article)
+    public function update(StoreArticleRequest $request, string $id)
     {
         try {
             DB::beginTransaction();
-            $article->update($request->all());
+            $article = $this->articleRepository->update($this->article, $request, $id);
+
            DB::commit();
 
             return response()->json([
@@ -89,16 +100,16 @@ class ArticlesController extends Controller
         }
     }
 
-    public function destroy(Article $article)
+    public function destroy(string $id)
     {
-        DB::beginTransaction();
         try {
-            $article->delete();
+            DB::beginTransaction();
+            $article = $this->articleRepository->destroy($this->article, $id);
             DB::commit();
-    
+
             return response()->json([
-                'status' => true,
-                'message' => "Post Deleted successfully!",
+                'message' => "Post Deleted success",
+                "article" => $article
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -15,6 +15,7 @@ class ShowArticleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($request->title);
         return [
             'id' => $this->id,
             'title' => $this->title,

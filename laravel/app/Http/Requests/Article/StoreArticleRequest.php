@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Article;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -17,14 +17,14 @@ class StoreArticleRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'title' => 'required | string | max:255',
-            'content' => 'string | max:255',
-            'user_id' => 'required | number'
+            'title' => 'required',
+            'content' => '',
+            // 'user_id' => 'required'
         ];
     }
 }

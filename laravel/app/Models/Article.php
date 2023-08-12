@@ -34,6 +34,8 @@ class Article extends Model
             "user_id" => Auth::id(),
         ]);
 
+        // dd($article);
+
         return $article;
     }
 }

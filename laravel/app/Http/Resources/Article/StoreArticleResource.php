@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Article;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Article\IndexArticleResource;
-
-class UserResource extends JsonResource
+;
+class StoreArticleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +14,13 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($this);
+        // dd($request);
+        // dd($request->title);
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'article' => IndexArticleResource::collection($this->whenLoaded('articles'))
+            'title' => $this->title,
+            'content' => $this->content
         ];
     }
 }

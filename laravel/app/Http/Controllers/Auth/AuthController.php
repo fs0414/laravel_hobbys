@@ -32,8 +32,10 @@ class AuthController extends Controller
     public function register(UserRegisterRequest $request, User $user, UserRegisterService $userRegisterService)
     {
         try {
+            // dd('test');
             $new_user = $user->userRegister($request);
 
+            // dd($new_user);
             return response()->json([
                 'status_code' => 201,
                 'new_user' => $new_user
