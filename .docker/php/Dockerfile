@@ -1,6 +1,6 @@
-FROM php:8.2.4RC1-fpm
+FROM php:8.2-fpm
 
-WORKDIR /var/www/laravel
+WORKDIR /workspace
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
@@ -20,24 +20,22 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-install pdo_mysql \
  && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y \
-    libzip-dev \
-    zip \
-  && docker-php-ext-install zip
-
-RUN apt-get install -y python3-pip \
-  && pip3 install awscli
-
 # AWS CLIのインストール
-# RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-# RUN unzip awscliv2.zip
-# RUN ./aws/install
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm -rf ./awscliv2.zip
 
-# # AWS SDKのインストール
-# # RUN composer require aws/aws-sdk-php
-# RUN curl "https://docs.aws.amazon.com/aws-sdk-php/v3/download/aws.zip" -o "awssdkphp.zip"
-# RUN unzip awssdkphp.zip -d /tmp
+# AWS SDKのインストール
+RUN composer require aws/aws-sdk-php
+RUN curl "https://docs.aws.amazon.com/aws-sdk-php/v3/download/aws.zip" -o "awssdkphp.zip"
+RUN unzip awssdkphp.zip -d /tmp
+RUN rm -rf /tmp/awssdkphp.zip \
+    && rm -rf ./awssdkphp.zip \
+    && rm -rf ./aws.zip
+
 
 # タイムゾーンを設定する環境変数
 ENV TZ=Asia/Tokyo
 
+# CMD [ "php", "artisan", "serve"]

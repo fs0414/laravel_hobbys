@@ -1,0 +1,39 @@
+/vendor/
+/composer.lock
+
+# .envファイル（環境変数）
+.env
+
+# キャッシュファイル
+cache/
+!/cache/.gitkeep
+
+# ログファイル
+logs/
+!/logs/.gitkeep
+
+# 一時ファイル
+tmp/
+!/tmp/.gitkeep
+
+# IDE設定（PHPStorm、VSCode等）
+.idea/
+/.vscode/
+
+# ノードモジュール（フロントエンド依存関係がある場合）
+/node_modules/
+
+# ビルド出力
+/dist/
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# その他の一般的なファイルやディレクトリ
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+/.installeies/
