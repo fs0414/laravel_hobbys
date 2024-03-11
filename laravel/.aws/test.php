@@ -7,10 +7,10 @@ use Aws\Exception\AwsException;
 
 $s3Client = new S3Client([
     'version' => 'latest',
-    'region' => 'ap-northeast-1',
+    'region'  => 'ap-northeast-1',
 ]);
 
-$bucketName = 'あなたのバケット名';
+$bucketName = 'node-hobbys-bucket-01';
 
 try {
     $result = $s3Client->listObjectsV2([
@@ -25,6 +25,5 @@ try {
         echo "バケット '$bucketName' は空です。\n";
     }
 } catch (AwsException $e) {
-    // エラー処理
     echo $e->getMessage() . "\n";
 }
